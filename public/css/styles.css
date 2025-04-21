@@ -219,4 +219,19 @@ body.glitching {
   display: none;
 }
 
+@media (max-width: 768px) {
+  #menu-overlay {
+    top: 60px; /* mantenemos altura original */
+    right: 10px; /* más pegado al borde derecho */
+    width: auto;
+    max-width: 260px;
+    padding: 10px 12px;
+  }
+
+  #menu-overlay h3 {
+    font-size: 1em;
+    text-align: right;
+  }
+}
+
 
