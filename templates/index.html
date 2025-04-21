@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El Loko Akrata - Terminal 🤖🧠</title>
+  <link rel="icon" type="image/png"
+        href="https://cdn.glitch.global/bda138b5-1829-421b-a2b1-695669498f79/el_loko_akarata.png?v=1729198704946">
+  <!-- rutas absolutas para subir a Glitch sin líos -->
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- ALERTAS INTERACTIVAS -->
+  <div id="alerts-container"></div>
+
+  <!-- IMAGEN PRINCIPAL -->
+  <div id="img-container">
+    <img
+      src="https://cdn.glitch.global/bda138b5-1829-421b-a2b1-695669498f79/el_loko_akarata.png?v=1729198704946"
+      alt="El Loko Akrata">
+    <div id="image-distortion"></div>
+  </div>
+
+  <!-- MENÚ FIJO -->
+  <div id="menu-overlay" class="menu-hidden">
+    <h3 style="color: #00ff88;">Cargando... menú</h3>
+  </div>
+
+  <!-- TERMINAL -->
+  <div id="terminal">
+    <div id="glitch-overlay"></div>
+    <div id="tv-distortion"></div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="/js/core.js"></script>
+  <script src="/js/terminal.js"></script>
+  <script src="/js/automation.js"></script>
+  <script src="/js/menu.js"></script>
+  <script src="/js/alerts.js"></script>
+</body>
+</html>

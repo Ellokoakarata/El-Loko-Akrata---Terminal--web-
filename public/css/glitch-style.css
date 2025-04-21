@@ -1,0 +1,67 @@
+body {
+    background: black;
+    color: #00ff00;
+    font-family: monospace;
+    margin: 0;
+    padding: 40px;
+  }
+  
+  .glitch-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    animation: flicker 2s infinite;
+  }
+  
+  .glitch-title {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #00ffff;
+    text-shadow: 0 0 4px #00ffcc, 0 0 8px #00ffcc;
+    animation: colorShift 4s infinite alternate;
+  }
+  
+  .glitch-box {
+    border: 2px solid #ff0044;
+    padding: 20px;
+    margin-bottom: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px #ff0044;
+    animation: glitchPulse 3s infinite alternate;
+  }
+  
+  .glitch-return {
+    color: #00ff00;
+    text-decoration: none;
+    border: 1px dashed #00ff00;
+    padding: 10px;
+    display: inline-block;
+    animation: flicker 1.2s infinite;
+  }
+  
+  .glitch-return:hover {
+    background: #00ff00;
+    color: black;
+    text-shadow: 0 0 4px #000;
+  }
+  
+  /* Animaciones */
+  
+  @keyframes flicker {
+    0%, 100% { opacity: 0.95; }
+    50% { opacity: 0.7; }
+    75% { opacity: 0.85; }
+  }
+  
+  @keyframes colorShift {
+    0% { color: #00ffff; }
+    50% { color: #00ff00; }
+    100% { color: #ff0044; }
+  }
+  
+  @keyframes glitchPulse {
+    0% { box-shadow: 0 0 5px #ff0044; }
+    50% { box-shadow: 0 0 20px #ff0044, 0 0 10px #00ffcc; }
+    100% { box-shadow: 0 0 5px #ff0044; }
+  }
+  
