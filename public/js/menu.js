@@ -28,6 +28,7 @@ function renderMenu() {
     <div class="menu-option" data-path="/ritual">[1] Ritual de Desfragmentación</div>
     <div class="menu-option" data-path="/glitch-core">[2] Núcleo Glitcheado</div>
     <div class="menu-option" data-path="/espejo">[3] Espejo de Prompts</div>
+    <div class="menu-option" data-path="/psytalk">[4] Habla con Psycho-Bot</div>
     <div class="menu-close">[X] Cerrar Menú</div>
   `;
   menuOverlay.classList.remove("menu-hidden");

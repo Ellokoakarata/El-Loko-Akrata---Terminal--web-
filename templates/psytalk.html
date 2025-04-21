@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PsyTalk Terminal</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    body {
+      background: black;
+      color: #00ff00;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    #terminal-output {
+      height: 65vh;
+      overflow-y: auto;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      background: black;
+    }
+
+    #input-area {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    #user-input {
+      flex: 1;
+      background: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 10px;
+      font-family: monospace;
+    }
+
+    #send-button {
+      background: lime;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #send-button:hover {
+      background: #00ff00;
+    }
+
+    .msg {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Psycho-Terminal: Conversaciones con Psycho-Bot 🧠</h2>
+
+    <div style="padding: 20px; text-align: center;">
+      <a href="/" style="color: #00ff00; font-family: monospace; font-size: 14px; border: 1px solid #00ff00; padding: 6px 12px; text-decoration: none;">
+        ↩ Volver a la Terminal Principal
+      </a>
+    </div>
+    
+
+    <div id="terminal-output">
+      <div class="msg">🟢 [Sistema] Terminal de conexión activada...</div>
+    </div>
+
+    <div id="input-area">
+      <input id="user-input" type="text" placeholder="Escribe tu mensaje...">
+      <button id="send-button">Enviar</button>
+    </div>
+  </div>
+
+  <script src="/js/psytalk.js"></script>
+</body>
+</html>
