@@ -2,15 +2,17 @@ from flask import Flask, render_template, send_from_directory, request, Response
 import os
 import requests
 import json
+import traceback
 
 app = Flask(__name__, static_folder='public', template_folder='templates')
 
-# 🔑 Tu clave de Groq como variable de entorno
+# 🔑 API Key como variable de entorno
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
-# Detectar si estamos en Glitch
-IS_GLITCH = os.environ.get("PROJECT_REMIX_CHAIN") is not None or os.environ.get("GLITCH_PROJECT_ID") is not None
+# 🔍 Detectar si estamos en Glitch
+IS_GLITCH = os.environ.get("PROJECT_REMIX_CHAIN") or os.environ.get("GLITCH_PROJECT_ID")
 
+# 📄 Rutas HTML
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -31,7 +33,7 @@ def glitch_core():
 def espejo():
     return render_template('espejo.html')
 
-# ⚡ Ruta con STREAMING para chat
+# 🧠 Ruta de conversación con stream
 @app.route('/api/psytalk', methods=['POST'])
 def psytalk_api():
     data = request.json
@@ -86,25 +88,39 @@ def psytalk_api():
                 "stream": True
             }
 
-            with requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, stream=True) as response:
+            with requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers=headers,
+                json=payload,
+                stream=True,
+                timeout=60
+            ) as response:
+
                 for line in response.iter_lines():
                     if line and line.startswith(b"data: "):
                         chunk = line[len(b"data: "):].decode("utf-8")
                         if chunk != "[DONE]":
-                            parsed = json.loads(chunk)
-                            content = parsed["choices"][0].get("delta", {}).get("content", "")
-                            if content:
-                                yield content
-        except Exception as e:
-            yield f"\n⚠️ Error de IA: {str(e)}"
+                            try:
+                                parsed = json.loads(chunk)
+                                content = parsed["choices"][0].get("delta", {}).get("content", "")
+                                if content:
+                                    yield content
+                            except Exception as parse_error:
+                                print("❌ Error procesando chunk:", parse_error)
+                                continue
+
+        except Exception:
+            print("🛑 Error crítico en la generación de respuesta:\n", traceback.format_exc())
+            yield "⚠️ Error de IA al generar respuesta. Intenta de nuevo."
 
     return Response(stream_with_context(generate()), content_type='text/plain')
 
-# Archivos estáticos
+# 📁 Archivos estáticos (JS, CSS, etc)
 @app.route('/<path:path>')
 def static_proxy(path):
     return send_from_directory('public', path)
 
+# 🚀 Ejecutar servidor
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
