@@ -10,7 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function addMessage(role, content) {
     const msg = document.createElement("div");
     msg.className = "msg";
-    msg.textContent = `${role === "user" ? "🧠 Tú" : role === "assistant" ? "🤖 IA" : "💾 Sistema"}: ${content}`;
+
+    if (role === "assistant") {
+      msg.innerHTML = `<span style="color:#ff4444;">🤖 IA: ${content}</span>`;
+    } else if (role === "user") {
+      msg.textContent = `🧠 Tú: ${content}`;
+    } else {
+      msg.textContent = `💾 Sistema: ${content}`;
+    }
+
     terminalOutput.appendChild(msg);
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
     return msg;
@@ -27,16 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = inputField.value.trim();
     if (!message) return;
 
-    // Mostrar mensaje del usuario
     addMessage("user", message);
     addToHistory("user", message);
     inputField.value = "";
 
-    // Mostrar mensaje temporal del sistema
     const systemMsg = addMessage("system", "🌀 Canalizando respuesta...");
+    const responseMsg = document.createElement("div");
+    responseMsg.className = "msg";
+    responseMsg.innerHTML = `<span style="color:#ff4444;">🤖 IA: </span>`;
+    terminalOutput.appendChild(responseMsg);
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
 
-    // Crear un contenedor para la respuesta IA en streaming
-    const responseMsg = addMessage("assistant", "");
     let buffer = "";
 
     try {
@@ -55,17 +64,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
-        responseMsg.textContent = `🤖 IA: ${buffer}`;
+
+        responseMsg.innerHTML = `<span style="color:#ff4444;">🤖 IA: ${buffer}</span>`;
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
       }
 
       addToHistory("assistant", buffer.trim());
     } catch (err) {
       console.error("❌ Error de streaming:", err);
-      responseMsg.textContent = "⚠️ Error de conexión con la IA.";
+      responseMsg.innerHTML = `<span style="color:#ff4444;">⚠️ Error de conexión con la IA.</span>`;
     }
 
-    // Eliminar mensaje temporal del sistema
     systemMsg.remove();
   }
 
