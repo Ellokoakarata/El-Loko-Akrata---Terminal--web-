@@ -1,4 +1,4 @@
-console.log("🟢 psytalk.js cargado correctamente");
+console.log("🟢 psytalk.js cargado correctamente (modo streaming)");
 
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("user-input");
@@ -13,12 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
     msg.textContent = `${role === "user" ? "🧠 Tú" : role === "assistant" ? "🤖 IA" : "💾 Sistema"}: ${content}`;
     terminalOutput.appendChild(msg);
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    return msg;
   }
 
   function addToHistory(role, content) {
     history.push({ role, content });
     if (history.length > 8) {
-      history = history.slice(-8); // mantener solo los últimos 8
+      history = history.slice(-8);
     }
   }
 
@@ -26,15 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = inputField.value.trim();
     if (!message) return;
 
-    addMessage("user", message);
+    const userMsg = addMessage("user", message);
     addToHistory("user", message);
     inputField.value = "";
 
-    const responseMsg = document.createElement("div");
-    responseMsg.className = "msg";
-    responseMsg.textContent = "💾 Sistema: 🌀 Streaming IA...";
-    terminalOutput.appendChild(responseMsg);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    const responseMsg = addMessage("assistant", "");
+    addMessage("system", "🌀 Canalizando respuesta...");
 
     try {
       const res = await fetch("/api/psytalk", {
@@ -43,39 +41,24 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ history })
       });
 
-      if (!res.body) throw new Error("No response body");
-
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let fullResponse = "";
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        fullResponse += chunk;
+        buffer += decoder.decode(value, { stream: true });
+        responseMsg.textContent = `🤖 IA: ${buffer}`;
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
       }
 
-      // parsear como JSON solo al final
-      try {
-        const parsed = JSON.parse(fullResponse);
-        const reply = parsed.reply || "Sin respuesta...";
-        responseMsg.textContent = `🤖 IA: ${reply}`;
-        addToHistory("assistant", reply);
-      } catch (err) {
-        console.error("❌ Error al parsear JSON:", err);
-        responseMsg.textContent = `🤖 IA: ${fullResponse}`;
-        addToHistory("assistant", fullResponse);
-      }
-
+      addToHistory("assistant", buffer.trim());
     } catch (err) {
-      console.error("❌ Error de conexión:", err);
-      responseMsg.textContent = "💾 Sistema: ⚠️ Error de conexión.";
+      console.error("❌ Error de streaming:", err);
+      addMessage("system", "⚠️ Error de conexión.");
     }
-
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
   }
 
   sendButton.addEventListener("click", () => sendMessage());
