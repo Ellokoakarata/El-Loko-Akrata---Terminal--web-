@@ -27,12 +27,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = inputField.value.trim();
     if (!message) return;
 
-    const userMsg = addMessage("user", message);
+    // Mostrar mensaje del usuario
+    addMessage("user", message);
     addToHistory("user", message);
     inputField.value = "";
 
+    // Mostrar mensaje temporal del sistema
+    const systemMsg = addMessage("system", "🌀 Canalizando respuesta...");
+
+    // Crear un contenedor para la respuesta IA en streaming
     const responseMsg = addMessage("assistant", "");
-    addMessage("system", "🌀 Canalizando respuesta...");
+    let buffer = "";
 
     try {
       const res = await fetch("/api/psytalk", {
@@ -43,13 +48,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        buffer += decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
         responseMsg.textContent = `🤖 IA: ${buffer}`;
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
       }
@@ -57,8 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
       addToHistory("assistant", buffer.trim());
     } catch (err) {
       console.error("❌ Error de streaming:", err);
-      addMessage("system", "⚠️ Error de conexión.");
+      responseMsg.textContent = "⚠️ Error de conexión con la IA.";
     }
+
+    // Eliminar mensaje temporal del sistema
+    systemMsg.remove();
   }
 
   sendButton.addEventListener("click", () => sendMessage());
