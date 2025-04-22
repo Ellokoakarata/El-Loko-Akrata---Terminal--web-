@@ -195,5 +195,3 @@ setTimeout(() => {
     renderMenu();
   }
 }, 15000); // aparece a los 15 segundos
-
-// script.js - el contenido será insertado luego

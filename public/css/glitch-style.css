@@ -1,67 +1,96 @@
 body {
-    background: black;
-    color: #00ff00;
-    font-family: monospace;
-    margin: 0;
-    padding: 40px;
-  }
-  
-  .glitch-container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    animation: flicker 2s infinite;
-  }
-  
-  .glitch-title {
-    font-size: 2em;
-    margin-bottom: 30px;
-    color: #00ffff;
-    text-shadow: 0 0 4px #00ffcc, 0 0 8px #00ffcc;
-    animation: colorShift 4s infinite alternate;
-  }
-  
-  .glitch-box {
-    border: 2px solid #ff0044;
-    padding: 20px;
-    margin-bottom: 30px;
-    background: rgba(0, 0, 0, 0.6);
-    box-shadow: 0 0 10px #ff0044;
-    animation: glitchPulse 3s infinite alternate;
-  }
-  
-  .glitch-return {
-    color: #00ff00;
-    text-decoration: none;
-    border: 1px dashed #00ff00;
-    padding: 10px;
-    display: inline-block;
-    animation: flicker 1.2s infinite;
-  }
-  
-  .glitch-return:hover {
-    background: #00ff00;
-    color: black;
-    text-shadow: 0 0 4px #000;
-  }
-  
-  /* Animaciones */
-  
-  @keyframes flicker {
-    0%, 100% { opacity: 0.95; }
-    50% { opacity: 0.7; }
-    75% { opacity: 0.85; }
-  }
-  
-  @keyframes colorShift {
-    0% { color: #00ffff; }
-    50% { color: #00ff00; }
-    100% { color: #ff0044; }
-  }
-  
-  @keyframes glitchPulse {
-    0% { box-shadow: 0 0 5px #ff0044; }
-    50% { box-shadow: 0 0 20px #ff0044, 0 0 10px #00ffcc; }
-    100% { box-shadow: 0 0 5px #ff0044; }
-  }
-  
+  background: black;
+  color: #00ff00;
+  font-family: monospace;
+  margin: 0;
+  padding: 0;
+
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* No permitir que nada se desborde visualmente */
+}
+
+.glitch-container {
+  max-width: 800px;
+  width: 100%;
+  height: 90vh; /* Caja máxima de altura */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Si quieres que el título esté arriba */
+  align-items: center;
+  animation: flicker 2s infinite;
+  overflow-y: auto;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+
+.glitch-title {
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #00ffff;
+  text-shadow: 0 0 4px #00ffcc, 0 0 8px #00ffcc;
+  animation: colorShift 4s infinite alternate;
+}
+
+.glitch-box {
+  border: 2px solid #ff0044;
+  padding: 20px;
+  margin-bottom: 30px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 10px #ff0044;
+  animation: glitchPulse 3s infinite alternate;
+
+  /* 🧠 Ajuste responsive para scroll */
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Estilo del scrollbar para .glitch-box */
+.glitch-box::-webkit-scrollbar {
+  width: 6px;
+}
+.glitch-box::-webkit-scrollbar-thumb {
+  background-color: #ff0044;
+  box-shadow: 0 0 5px #ff0044;
+  border-radius: 3px;
+}
+
+.glitch-return {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background: black;
+  padding: 10px;
+  border: 1px dashed #00ff00;
+}
+
+
+.glitch-return:hover {
+  background: #00ff00;
+  color: black;
+  text-shadow: 0 0 4px #000;
+}
+
+/* Animaciones */
+@keyframes flicker {
+  0%, 100% { opacity: 0.95; }
+  50% { opacity: 0.7; }
+  75% { opacity: 0.85; }
+}
+
+@keyframes colorShift {
+  0% { color: #00ffff; }
+  50% { color: #00ff00; }
+  100% { color: #ff0044; }
+}
+
+@keyframes glitchPulse {
+  0% { box-shadow: 0 0 5px #ff0044; }
+  50% { box-shadow: 0 0 20px #ff0044, 0 0 10px #00ffcc; }
+  100% { box-shadow: 0 0 5px #ff0044; }
+}
