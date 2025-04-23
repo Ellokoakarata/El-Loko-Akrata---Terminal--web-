@@ -1,0 +1,26 @@
+# ⛔ Archivos sensibles y secretos
+.env
+
+# ⛔ Logs y archivos locales persistentes
+data/
+*.log
+
+# ⛔ Entorno de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+
+# ⛔ Entornos virtuales de VSCode o IDEs
+.vscode/
+.idea/
+
+# ⛔ Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# ⛔ Archivos temporales o de pruebas
+*.bak
+*.tmp
